@@ -1,0 +1,1035 @@
+
+R version 4.4.1 (2024-06-14 ucrt) -- "Race for Your Life"
+Copyright (C) 2024 The R Foundation for Statistical Computing
+Platform: x86_64-w64-mingw32/x64
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Workspace loaded from D:/Google Data Analytics/8. Google Data Analytics Capstone - Complete a Case Study/Bellabeat/.RData]
+
+
+
+# 1. COMBINING TABLES
+
+# DAILY ACTIVITY TABLE 
+
+> library(readr)
+> dailyActivity_merged_ma <- read_csv("Dataset/Fitabase_3.12.16_4.11.16/dailyActivity_merged_ma.csv", 
++     col_types = cols(ActivityDate = col_date(format = "%m/%d/%Y")))
+> View(dailyActivity_merged_ma)                                                           
+> library(readr)
+> dailyActivity_merged_am <- read_csv("Dataset/Fitabase_4.12.16_5.12.16/dailyActivity_merged_am.csv", 
++     col_types = cols(ActivityDate = col_date(format = "%m/%d/%Y")))
+> View(dailyActivity_merged_am)                                                           
+> library(readr)
+> dailyCalories_merged_am <- read_csv("Dataset/Fitabase_4.12.16_5.12.16/dailyCalories_merged_am.csv", 
++     col_types = cols(ActivityDay = col_date(format = "%m/%d/%Y")))
+> View(dailyCalories_merged_am)                                                           
+> library(readr)
+> dailyIntensities_merged_am <- read_csv("Dataset/Fitabase_4.12.16_5.12.16/dailyIntensities_merged_am.csv", 
++     col_types = cols(ActivityDay = col_date(format = "%m/%d/%Y")))
+> View(dailyIntensities_merged_am)                                                        
+> library(readr)
+> dailySteps_merged_am <- read_csv("Dataset/Fitabase_4.12.16_5.12.16/dailySteps_merged_am.csv", 
++     col_types = cols(ActivityDay = col_date(format = "%m/%d/%Y")))
+
+> library(tidyverse)
+── Attaching core tidyverse packages ────────────────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ purrr     1.0.2
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+── Conflicts ──────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package to force all conflicts to become errors
+
+> colnames(dailyActivity_merged_am)
+ [1] "Id"                       "ActivityDate"             "TotalSteps"              
+ [4] "TotalDistance"            "TrackerDistance"          "LoggedActivitiesDistance"
+ [7] "VeryActiveDistance"       "ModeratelyActiveDistance" "LightActiveDistance"     
+[10] "SedentaryActiveDistance"  "VeryActiveMinutes"        "FairlyActiveMinutes"     
+[13] "LightlyActiveMinutes"     "SedentaryMinutes"         "Calories"                
+> colnames(dailyActivity_merged_ma)
+ [1] "Id"                       "ActivityDate"             "TotalSteps"              
+ [4] "TotalDistance"            "TrackerDistance"          "LoggedActivitiesDistance"
+ [7] "VeryActiveDistance"       "ModeratelyActiveDistance" "LightActiveDistance"     
+[10] "SedentaryActiveDistance"  "VeryActiveMinutes"        "FairlyActiveMinutes"     
+[13] "LightlyActiveMinutes"     "SedentaryMinutes"         "Calories"
+> colnames(dailyCalories_merged_am)
+[1] "Id"          "ActivityDay" "Calories"   
+> colnames(dailyIntensities_merged_am)
+ [1] "Id"                       "ActivityDay"              "SedentaryMinutes"        
+ [4] "LightlyActiveMinutes"     "FairlyActiveMinutes"      "VeryActiveMinutes"       
+ [7] "SedentaryActiveDistance"  "LightActiveDistance"      "ModeratelyActiveDistance"
+[10] "VeryActiveDistance"      
+> colnames(dailySteps_merged_am)
+[1] "Id"          "ActivityDay" "StepTotal" 
+
+> nrow(dailyActivity_merged_am)
+[1] 940
+> nrow(dailyActivity_merged_ma)
+[1] 457
+> daily_activity <- rbind(dailyActivity_merged_am, dailyActivity_merged_ma)
+> nrow(daily_activity)
+[1] 1397
+> rm(dailyActivity_merged_am, dailyActivity_merged_ma, dailyCalories_merged_am, dailyIntensities_merged_am, dailySteps_merged_am)
+
+
+# WEIGHT LOG TABLE
+
+> weightLogInfo_merged_ma <- read_csv("Dataset/Fitabase_3.12.16_4.11.16/weightLogInfo_merged_ma.csv", 
++     col_types = cols(Date = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(weightLogInfo_merged_ma)                                                           
+> library(readr)
+> weightLogInfo_merged_am <- read_csv("Dataset/Fitabase_4.12.16_5.12.16/weightLogInfo_merged_am.csv", 
++     col_types = cols(Date = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(weightLogInfo_merged_am)                                                           
+> colnames(weightLogInfo_merged_am)
+[1] "Id"             "Date"           "WeightKg"       "WeightPounds"   "Fat"           
+[6] "BMI"            "IsManualReport" "LogId"         
+> colnames(weightLogInfo_merged_ma)
+[1] "Id"             "Date"           "WeightKg"       "WeightPounds"   "Fat"           
+[6] "BMI"            "IsManualReport" "LogId"         
+> nrow(weightLogInfo_merged_am)
+[1] 67
+> nrow(weightLogInfo_merged_ma)
+[1] 33
+> weight_log <- rbind(weightLogInfo_merged_am, weightLogInfo_merged_ma)
+> nrow(weight_log)
+[1] 100
+> View(weight_log)
+> rm(weightLogInfo_merged_am, weightLogInfo_merged_ma)
+
+
+# HEARTRATE SECONDS TABLE
+
+> heartrate_seconds_merged_ma <- read_csv("Dataset/Fitabase Data 3.12.16-4.11.16/heartrate_seconds_merged__ma.csv", 
++     col_types = cols(Time = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(heartrate_seconds_merged_ma)                                                       
+> library(readr)
+> heartrate_seconds_merged_am <- read_csv("Dataset/Fitabase Data 4.12.16-5.12.16/heartrate_seconds_merged_am.csv", 
++     col_types = cols(Time = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(heartrate_seconds_merged_am)                                                       
+> colnames(heartrate_seconds_merged_am)
+[1] "Id"    "Time"  "Value"
+> colnames(heartrate_seconds_merged_ma)
+[1] "Id"    "Time"  "Value"
+> nrow(heartrate_seconds_merged_am)
+[1] 2483658
+> nrow(heartrate_seconds_merged_ma)
+[1] 1154681
+> heartrate_seconds <- rbind(heartrate_seconds_merged_am, heartrate_seconds_merged_ma)
+> nrow(heartrate_seconds)
+[1] 3638339
+> rm(heartrate_seconds_merged_am, heartrate_seconds_merged_ma)
+
+
+# HOURLY CALORIES INTENSITIES STEPS TABLE
+
+> hourlyCalories_merged_ma <- read_csv("Dataset/Fitabase Data 3.12.16-4.11.16/hourlyCalories_merged_ma.csv", 
++     col_types = cols(ActivityHour = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(hourlyCalories_merged_ma)                                                          
+> library(readr)
+> hourlyIntensities_merged_ma <- read_csv("Dataset/Fitabase Data 3.12.16-4.11.16/hourlyIntensities_merged_ma.csv", 
++     col_types = cols(ActivityHour = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(hourlyIntensities_merged_ma)                                                       
+> library(readr)
+> hourlySteps_merged_ma <- read_csv("Dataset/Fitabase Data 3.12.16-4.11.16/hourlySteps_merged_ma.csv", 
++     col_types = cols(ActivityHour = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(hourlySteps_merged_ma)                                                             
+> colnames(hourlyCalories_merged_ma)
+[1] "Id"           "ActivityHour" "Calories"    
+> colnames(hourlyIntensities_merged_ma)
+[1] "Id"               "ActivityHour"     "TotalIntensity"   "AverageIntensity"
+> colnames(hourlySteps_merged_ma)
+[1] "Id"           "ActivityHour" "StepTotal"   
+> nrow(hourlyCalories_merged_ma)
+[1] 24084
+> nrow(hourlyIntensities_merged_ma)
+[1] 24084
+> nrow(hourlySteps_merged_ma)
+[1] 24084
+> hourly_summary <- merge(hourlyCalories_merged_ma, hourlyIntensities_merged_ma, by = c("Id", "ActivityHour"))
+> hourly_summary <- merge(hourly_summary, hourlySteps_merged_ma, by = c("Id", "ActivityHour"))
+> nrow(hourly_summary)
+[1] 24084
+> colnames(hourly_summary)
+[1] "Id"               "ActivityHour"     "Calories"         "TotalIntensity"  
+[5] "AverageIntensity" "StepTotal"       
+> rm(hourlyCalories_merged_ma, hourlyIntensities_merged_ma, hourlySteps_merged_ma)
+> hourlyCalories_merged_am <- read_csv("Dataset/Fitabase Data 4.12.16-5.12.16/hourlyCalories_merged_am.csv", 
++     col_types = cols(ActivityHour = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(hourlyCalories_merged_am)                                                          
+> library(readr)
+> hourlyIntensities_merged_am <- read_csv("Dataset/Fitabase Data 4.12.16-5.12.16/hourlyIntensities_merged_am.csv", 
++     col_types = cols(ActivityHour = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(hourlyIntensities_merged_am)                                                       
+> library(readr)
+> hourlySteps_merged_am <- read_csv("Dataset/Fitabase Data 4.12.16-5.12.16/hourlySteps_merged_am.csv", 
++     col_types = cols(ActivityHour = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(hourlySteps_merged_am)                                                             
+> colnames(hourlyCalories_merged_am)
+[1] "Id"           "ActivityHour" "Calories"    
+> colnames(hourlyIntensities_merged_am)
+[1] "Id"               "ActivityHour"     "TotalIntensity"   "AverageIntensity"
+> colnames(hourlySteps_merged_am)
+[1] "Id"           "ActivityHour" "StepTotal"   
+> nrow(hourlyCalories_merged_am)
+[1] 22099
+> nrow(hourlyIntensities_merged_am)
+[1] 22099
+> nrow(hourlySteps_merged_am)
+[1] 22099
+> hourly_summary_ <- merge(hourlyCalories_merged_am, hourlyIntensities_merged_am, by = c("Id", "ActivityHour"))
+> hourly_summary_ <- merge(hourly_summary_, hourlySteps_merged_am, by = c("Id", "ActivityHour"))
+> nrow(hourly_summary_)
+[1] 22099
+> colnames(hourly_summary_)
+[1] "Id"               "ActivityHour"     "Calories"         "TotalIntensity"  
+[5] "AverageIntensity" "StepTotal"       
+> rm(hourlyCalories_merged_am, hourlyIntensities_merged_am, hourlySteps_merged_am)
+> colnames(hourly_summary)
+[1] "Id"               "ActivityHour"     "Calories"         "TotalIntensity"  
+[5] "AverageIntensity" "StepTotal"       
+> colnames(hourly_summary_)
+[1] "Id"               "ActivityHour"     "Calories"         "TotalIntensity"  
+[5] "AverageIntensity" "StepTotal"       
+> nrow(hourly_summary)
+[1] 24084
+> nrow(hourly_summary_)
+[1] 22099
+> hourly__summary <- rbind(hourly_summary, hourly_summary_)
+> nrow(hourly__summary)
+[1] 46183
+> rm(hourly_summary, hourly_summary_)
+> hourly_summary <- hourly__summary
+> rm(hourly__summary)
+
+
+# MINUTELY CALORIES INTENSITY STEPS METs TABLE
+
+> library(readr)
+> minuteCaloriesNarrow_merged_ma <- read_csv("Dataset/Fitabase Data 3.12.16-4.11.16/minuteCaloriesNarrow_merged_ma.csv", 
++     col_types = cols(ActivityMinute = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteCaloriesNarrow_merged_ma)                                                    
+> library(readr)
+> minuteIntensitiesNarrow_merged_ma <- read_csv("Dataset/Fitabase Data 3.12.16-4.11.16/minuteIntensitiesNarrow_merged_ma.csv", 
++     col_types = cols(ActivityMinute = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteIntensitiesNarrow_merged_ma)                                                 
+> library(readr)
+> minuteMETsNarrow_merged_ma <- read_csv("Dataset/Fitabase Data 3.12.16-4.11.16/minuteMETsNarrow_merged_ma.csv", 
++     col_types = cols(ActivityMinute = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteMETsNarrow_merged_ma)                                                        
+> library(readr)
+> minuteStepsNarrow_merged_ma <- read_csv("Dataset/Fitabase Data 3.12.16-4.11.16/minuteStepsNarrow_merged_ma.csv", 
++     col_types = cols(ActivityMinute = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteStepsNarrow_merged_ma) 
+> colnames(minuteCaloriesNarrow_merged_ma)
+[1] "Id"             "ActivityMinute" "Calories"      
+> colnames(minuteIntensitiesNarrow_merged_ma)
+[1] "Id"             "ActivityMinute" "Intensity"     
+> colnames(minuteMETsNarrow_merged_ma)
+[1] "Id"             "ActivityMinute" "METs"          
+> colnames(minuteStepsNarrow_merged_ma)
+[1] "Id"             "ActivityMinute" "Steps"         
+> nrow(minuteCaloriesNarrow_merged_ma)
+[1] 1445040
+> nrow(minuteIntensitiesNarrow_merged_ma)
+[1] 1445040
+> nrow(minuteMETsNarrow_merged_ma)
+[1] 1445040
+> nrow(minuteStepsNarrow_merged_ma)
+[1] 1445040
+> minutely_summary_ma <- merge(minuteCaloriesNarrow_merged_ma, minuteIntensitiesNarrow_merged_ma, by = c("Id", "ActivityMinute"))
+> minutely_summary_ma <- merge(minutely_summary_ma, minuteMETsNarrow_merged_ma, by = c("Id", "ActivityMinute"))
+> minutely_summary_ma <- merge(minutely_summary_ma, minuteStepsNarrow_merged_ma, by = c("Id", "ActivityMinute"))
+> nrow(minutely_summary_ma)
+[1] 1445040
+> colnames(minutely_summary_ma)
+[1] "Id"             "ActivityMinute" "Calories"       "Intensity"      "METs"          
+[6] "Steps" 
+> rm(minuteCaloriesNarrow_merged_ma, minuteIntensitiesNarrow_merged_ma, minuteMETsNarrow_merged_ma, minuteStepsNarrow_merged_ma)
+> library(readr)
+> minuteCaloriesNarrow_merged_am <- read_csv("Dataset/Fitabase Data 4.12.16-5.12.16/minuteCaloriesNarrow_merged_am.csv", 
++     col_types = cols(ActivityMinute = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteCaloriesNarrow_merged_am)                                                    
+> library(readr)
+> minuteIntensitiesNarrow_merged_am <- read_csv("Dataset/Fitabase Data 4.12.16-5.12.16/minuteIntensitiesNarrow_merged_am.csv", 
++     col_types = cols(ActivityMinute = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteIntensitiesNarrow_merged_am)                                                 
+> library(readr)
+> minuteMETsNarrow_merged_am <- read_csv("Dataset/Fitabase Data 4.12.16-5.12.16/minuteMETsNarrow_merged_am.csv", 
++     col_types = cols(ActivityMinute = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteMETsNarrow_merged_am)                                                        
+> library(readr)
+> minuteStepsNarrow_merged_am <- read_csv("Dataset/Fitabase Data 4.12.16-5.12.16/minuteStepsNarrow_merged_am.csv", 
++     col_types = cols(ActivityMinute = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteStepsNarrow_merged_am)                                                       
+> colnames(minuteCaloriesNarrow_merged_am)
+[1] "Id"             "ActivityMinute" "Calories"      
+> colnames(minuteIntensitiesNarrow_merged_am)
+[1] "Id"             "ActivityMinute" "Intensity"     
+> colnames(minuteMETsNarrow_merged_am)
+[1] "Id"             "ActivityMinute" "METs"          
+> colnames(minuteStepsNarrow_merged_am)
+[1] "Id"             "ActivityMinute" "Steps"         
+> nrow(minuteCaloriesNarrow_merged_am)
+[1] 1325580
+> nrow(minuteIntensitiesNarrow_merged_am)
+[1] 1325580
+> nrow(minuteMETsNarrow_merged_am)
+[1] 1325580
+> nrow(minuteStepsNarrow_merged_am)
+[1] 1325580
+> minutely_summary_am <- merge(minuteCaloriesNarrow_merged_am, minuteIntensitiesNarrow_merged_am, by = c("Id", "ActivityMinute"))
+> minutely_summary_am <- merge(minutely_summary_am, minuteMETsNarrow_merged_am, by = c("Id", "ActivityMinute"))
+> minutely_summary_am <- merge(minutely_summary_am, minuteStepsNarrow_merged_am, by = c("Id", "ActivityMinute"))
+> nrow(minutely_summary_am)
+[1] 1325580
+> colnames(minutely_summary_am)
+[1] "Id"             "ActivityMinute" "Calories"       "Intensity"      "METs"          
+[6] "Steps"                
+> colnames(minutely_summary_ma)
+[1] "Id"             "ActivityMinute" "Calories"       "Intensity"      "METs"          
+[6] "Steps"         
+> nrow(minutely_summary_am)
+[1] 1325580
+> nrow(minutely_summary_ma)
+[1] 1445040
+> minutely_summary <- rbind(minutely_summary_ma, minutely_summary_am)
+> colnames(minutely_summary)
+[1] "Id"             "ActivityMinute" "Calories"       "Intensity"      "METs"          
+[6] "Steps"         
+> nrow(minutely_summary)
+[1] 2770620
+> rm(minutely_summary_am, minutely_summary_ma)
+> rm(minuteCaloriesNarrow_merged_am, minuteIntensitiesNarrow_merged_am, minuteMETsNarrow_merged_am, minuteStepsNarrow_merged_am)
+
+
+#  MINUTES ASLEEP TABLE
+
+> library(readr)
+> minuteSleep_merged_ma <- read_csv("Dataset/Fitabase Data 3.12.16-4.11.16/minuteSleep_merged_ma.csv", 
++     col_types = cols(date = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteSleep_merged_ma)                                                             
+> library(readr)
+> minuteSleep_merged_am <- read_csv("Dataset/Fitabase Data 4.12.16-5.12.16/minuteSleep_merged_am.csv", 
++     col_types = cols(date = col_datetime(format = "%m/%d/%Y %H:%M:%S %p")))
+> View(minuteSleep_merged_am)                                                             
+> colnames(minuteSleep_merged_am)
+[1] "Id"    "date"  "value" "logId"
+> colnames(minuteSleep_merged_ma)
+[1] "Id"    "date"  "value" "logId"
+> nrow(minuteSleep_merged_am)
+[1] 188521
+> nrow(minuteSleep_merged_ma)
+[1] 198559
+> minutes_asleep <- rbind(minuteSleep_merged_ma, minuteSleep_merged_am)
+> nrow(minutes_asleep)
+[1] 387080
+> rm(minuteSleep_merged_ma, minuteSleep_merged_am)
+> colnames(minutes_asleep)
+[1] "Id"    "date"  "value" "logId"
+
+
+#  SLEEP DAY TABLE
+#  USED CHATGPT TO CREATE SLEEP DAY TABLE BY REFERRING TO MINUTES ASLEEP TABLE
+
+> library(readxl)
+> sleep_day <- read_excel("Merged Data/sleep_day.xlsx", 
++     col_types = c("numeric", "date", "numeric", 
++         "numeric", "numeric"))
+
+
+
+
+# 2. SUMMARY OF TABLES
+
+> summary(daily_activity)
+       Id             ActivityDate          TotalSteps    TotalDistance   
+ Min.   :1.504e+09   Min.   :2016-03-12   Min.   :    0   Min.   : 0.000  
+ 1st Qu.:2.320e+09   1st Qu.:2016-04-09   1st Qu.: 3146   1st Qu.: 2.170  
+ Median :4.445e+09   Median :2016-04-19   Median : 6999   Median : 4.950  
+ Mean   :4.781e+09   Mean   :2016-04-19   Mean   : 7281   Mean   : 5.219  
+ 3rd Qu.:6.962e+09   3rd Qu.:2016-04-30   3rd Qu.:10544   3rd Qu.: 7.500  
+ Max.   :8.878e+09   Max.   :2016-05-12   Max.   :36019   Max.   :28.030  
+ TrackerDistance  LoggedActivitiesDistance VeryActiveDistance ModeratelyActiveDistance
+ Min.   : 0.000   Min.   :0.0000           Min.   : 0.000     Min.   :0.0000          
+ 1st Qu.: 2.160   1st Qu.:0.0000           1st Qu.: 0.000     1st Qu.:0.0000          
+ Median : 4.950   Median :0.0000           Median : 0.100     Median :0.2000          
+ Mean   : 5.192   Mean   :0.1315           Mean   : 1.397     Mean   :0.5385          
+ 3rd Qu.: 7.480   3rd Qu.:0.0000           3rd Qu.: 1.830     3rd Qu.:0.7700          
+ Max.   :28.030   Max.   :6.7271           Max.   :21.920     Max.   :6.4800          
+ LightActiveDistance SedentaryActiveDistance VeryActiveMinutes FairlyActiveMinutes
+ Min.   : 0.000      Min.   :0.000000        Min.   :  0.00    Min.   :  0.0      
+ 1st Qu.: 1.610      1st Qu.:0.000000        1st Qu.:  0.00    1st Qu.:  0.0      
+ Median : 3.240      Median :0.000000        Median :  2.00    Median :  6.0      
+ Mean   : 3.193      Mean   :0.001704        Mean   : 19.68    Mean   : 13.4      
+ 3rd Qu.: 4.690      3rd Qu.:0.000000        3rd Qu.: 30.00    3rd Qu.: 18.0      
+ Max.   :12.510      Max.   :0.110000        Max.   :210.00    Max.   :660.0      
+ LightlyActiveMinutes SedentaryMinutes    Calories   
+ Min.   :  0.0        Min.   :   0.0   Min.   :   0  
+ 1st Qu.:111.0        1st Qu.: 729.0   1st Qu.:1799  
+ Median :195.0        Median :1057.0   Median :2114  
+ Mean   :185.4        Mean   : 992.5   Mean   :2266  
+ 3rd Qu.:262.0        3rd Qu.:1244.0   3rd Qu.:2770  
+ Max.   :720.0        Max.   :1440.0   Max.   :4900  
+> summary(heartrate_seconds)
+       Id                 Time                            Value      
+ Min.   :2.022e+09   Min.   :2016-03-29 00:00:05.00   Min.   : 36.0  
+ 1st Qu.:4.020e+09   1st Qu.:2016-04-09 10:30:49.50   1st Qu.: 64.0  
+ Median :5.554e+09   Median :2016-04-19 17:30:00.00   Median : 74.0  
+ Mean   :5.462e+09   Mean   :2016-04-20 06:09:41.73   Mean   : 78.1  
+ 3rd Qu.:6.962e+09   3rd Qu.:2016-04-30 19:16:02.00   3rd Qu.: 88.0  
+ Max.   :8.878e+09   Max.   :2016-05-12 16:20:00.00   Max.   :203.0  
+> summary(hourly_summary)
+       Id             ActivityHour                       Calories      TotalIntensity 
+ Min.   :1.504e+09   Min.   :2016-03-12 00:00:00.00   Min.   : 42.00   Min.   :  0.0  
+ 1st Qu.:2.320e+09   1st Qu.:2016-03-26 13:00:00.00   1st Qu.: 62.00   1st Qu.:  0.0  
+ Median :4.559e+09   Median :2016-04-10 14:00:00.00   Median : 80.00   Median :  2.0  
+ Mean   :4.870e+09   Mean   :2016-04-10 17:10:55.96   Mean   : 95.76   Mean   : 11.4  
+ 3rd Qu.:6.962e+09   3rd Qu.:2016-04-25 15:00:00.00   3rd Qu.:106.00   3rd Qu.: 15.0  
+ Max.   :8.878e+09   Max.   :2016-05-12 15:00:00.00   Max.   :948.00   Max.   :180.0  
+ AverageIntensity    StepTotal      
+ Min.   :0.00000   Min.   :    0.0  
+ 1st Qu.:0.00000   1st Qu.:    0.0  
+ Median :0.03333   Median :   20.0  
+ Mean   :0.19008   Mean   :  302.5  
+ 3rd Qu.:0.25000   3rd Qu.:  322.0  
+ Max.   :3.00000   Max.   :10565.0  
+> summary(minutely_summary)
+       Id            ActivityMinute                      Calories         Intensity     
+ Min.   :1.504e+09   Min.   :2016-03-12 00:00:00.00   Min.   : 0.0000   Min.   :0.0000  
+ 1st Qu.:2.320e+09   1st Qu.:2016-03-26 13:49:00.00   1st Qu.: 0.9357   1st Qu.:0.0000  
+ Median :4.559e+09   Median :2016-04-10 14:14:30.00   Median : 1.2176   Median :0.0000  
+ Mean   :4.870e+09   Mean   :2016-04-10 17:34:28.27   Mean   : 1.5961   Mean   :0.1901  
+ 3rd Qu.:6.962e+09   3rd Qu.:2016-04-25 14:53:00.00   3rd Qu.: 1.4310   3rd Qu.:0.0000  
+ Max.   :8.878e+09   Max.   :2016-05-12 15:59:00.00   Max.   :23.0126   Max.   :3.0000  
+      METs            Steps        
+ Min.   :  0.00   Min.   :  0.000  
+ 1st Qu.: 10.00   1st Qu.:  0.000  
+ Median : 10.00   Median :  0.000  
+ Mean   : 14.45   Mean   :  5.041  
+ 3rd Qu.: 11.00   3rd Qu.:  0.000  
+ Max.   :189.00   Max.   :220.000  
+> summary(minutes_asleep)
+       Id                 date                           value           logId          
+ Min.   :1.504e+09   Min.   :2016-03-11 21:19:30.0   Min.   :1.000   Min.   :1.110e+10  
+ 1st Qu.:3.977e+09   1st Qu.:2016-03-27 23:41:22.5   1st Qu.:1.000   1st Qu.:1.124e+10  
+ Median :4.703e+09   Median :2016-04-11 04:38:30.0   Median :1.000   Median :1.137e+10  
+ Mean   :4.908e+09   Mean   :2016-04-11 04:05:56.9   Mean   :1.091   Mean   :1.137e+10  
+ 3rd Qu.:6.776e+09   3rd Qu.:2016-04-26 04:00:30.0   3rd Qu.:1.000   3rd Qu.:1.150e+10  
+ Max.   :8.792e+09   Max.   :2016-05-12 09:56:00.0   Max.   :3.000   Max.   :1.162e+10  
+> summary(sleep_day)
+       Id               SleepDay                      TotalSleepRecords
+ Min.   :1.504e+09   Min.   :2016-03-11 00:00:00.00   Min.   :1.000    
+ 1st Qu.:3.977e+09   1st Qu.:2016-03-27 00:00:00.00   1st Qu.:1.000    
+ Median :4.703e+09   Median :2016-04-11 00:00:00.00   Median :2.000    
+ Mean   :4.875e+09   Mean   :2016-04-10 19:17:06.85   Mean   :1.686    
+ 3rd Qu.:6.776e+09   3rd Qu.:2016-04-26 00:00:00.00   3rd Qu.:2.000    
+ Max.   :8.792e+09   Max.   :2016-05-12 00:00:00.00   Max.   :6.000    
+ TotalMinutesAsleep TotalTimeInBed  
+ Min.   :   0.0     Min.   :   4.0  
+ 1st Qu.: 331.0     1st Qu.: 373.0  
+ Median : 417.0     Median : 450.0  
+ Mean   : 395.1     Mean   : 429.6  
+ 3rd Qu.: 490.0     3rd Qu.: 522.0  
+ Max.   :1108.0     Max.   :1149.0  
+> summary(weight_log)
+       Id                 Date                           WeightKg      WeightPounds  
+ Min.   :1.504e+09   Min.   :2016-03-30 23:59:59.00   Min.   : 52.6   Min.   :116.0  
+ 1st Qu.:6.962e+09   1st Qu.:2016-04-09 06:04:38.75   1st Qu.: 61.5   1st Qu.:135.6  
+ Median :6.962e+09   Median :2016-04-19 15:19:45.00   Median : 62.5   Median :137.8  
+ Mean   :6.834e+09   Mean   :2016-04-20 17:32:27.73   Mean   : 72.5   Mean   :159.8  
+ 3rd Qu.:8.878e+09   3rd Qu.:2016-05-01 23:59:59.00   3rd Qu.: 85.3   3rd Qu.:188.1  
+ Max.   :8.878e+09   Max.   :2016-05-12 23:59:59.00   Max.   :133.5   Max.   :294.3  
+                                                                                     
+      Fat             BMI        IsManualReport      LogId          
+ Min.   :10.00   Min.   :21.45   Mode :logical   Min.   :1.459e+12  
+ 1st Qu.:19.00   1st Qu.:24.00   FALSE:36        1st Qu.:1.460e+12  
+ Median :22.00   Median :24.39   TRUE :64        Median :1.461e+12  
+ Mean   :19.75   Mean   :25.37                   Mean   :1.461e+12  
+ 3rd Qu.:22.75   3rd Qu.:25.59                   3rd Qu.:1.462e+12  
+ Max.   :25.00   Max.   :47.54                   Max.   :1.463e+12  
+ NA's   :96 
+
+
+
+#  CLEANING TABLES
+
+# DAILY ACTIVITY TABLE
+
+
+> colSums(is.na(daily_activity))
+                      Id             ActivityDate               TotalSteps 
+                       0                        0                        0 
+           TotalDistance          TrackerDistance LoggedActivitiesDistance 
+                       0                        0                        0 
+      VeryActiveDistance ModeratelyActiveDistance      LightActiveDistance 
+                       0                        0                        0 
+ SedentaryActiveDistance        VeryActiveMinutes      FairlyActiveMinutes 
+                       0                        0                        0 
+    LightlyActiveMinutes         SedentaryMinutes                 Calories 
+                       0                        0                        0 
+
+> sum(duplicated(daily_activity))
+[1] 0
+> View(daily_activity)
+> daily_activity$LoggedActivitiesDistance <- NULL
+> daily_activity$month <- format(as.Date(daily_activity$ActivityDate), "%m")
+> daily_activity$day <- format(as.Date(daily_activity$ActivityDate), "%d")
+> daily_activity$day_of_week <- format(as.Date(daily_activity$ActivityDate), "%A")
+> str(daily_activity)
+spc_tbl_ [1,397 × 17] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ Id                      : num [1:1397] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ ActivityDate            : Date[1:1397], format: "2016-04-12" "2016-04-13" ...
+ $ TotalSteps              : num [1:1397] 13162 10735 10460 9762 12669 ...
+ $ TotalDistance           : num [1:1397] 8.5 6.97 6.74 6.28 8.16 ...
+ $ TrackerDistance         : num [1:1397] 8.5 6.97 6.74 6.28 8.16 ...
+ $ VeryActiveDistance      : num [1:1397] 1.88 1.57 2.44 2.14 2.71 ...
+ $ ModeratelyActiveDistance: num [1:1397] 0.55 0.69 0.4 1.26 0.41 ...
+ $ LightActiveDistance     : num [1:1397] 6.06 4.71 3.91 2.83 5.04 ...
+ $ SedentaryActiveDistance : num [1:1397] 0 0 0 0 0 0 0 0 0 0 ...
+ $ VeryActiveMinutes       : num [1:1397] 25 21 30 29 36 38 42 50 28 19 ...
+ $ FairlyActiveMinutes     : num [1:1397] 13 19 11 34 10 20 16 31 12 8 ...
+ $ LightlyActiveMinutes    : num [1:1397] 328 217 181 209 221 164 233 264 205 211 ...
+ $ SedentaryMinutes        : num [1:1397] 728 776 1218 726 773 ...
+ $ Calories                : num [1:1397] 1985 1797 1776 1745 1863 ...
+ $ month                   : chr [1:1397] "04" "04" "04" "04" ...
+ $ day                     : chr [1:1397] "12" "13" "14" "15" ...
+ $ day_of_week             : chr [1:1397] "Tuesday" "Wednesday" "Thursday" "Friday" ...
+> daily_activity$month <- as.numeric(as.character(daily_activity$month))
+> daily_activity$day <- as.numeric(as.character(daily_activity$day))
+> str(daily_activity)
+spc_tbl_ [1,397 × 17] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ Id                      : num [1:1397] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ ActivityDate            : Date[1:1397], format: "2016-04-12" "2016-04-13" ...
+ $ TotalSteps              : num [1:1397] 13162 10735 10460 9762 12669 ...
+ $ TotalDistance           : num [1:1397] 8.5 6.97 6.74 6.28 8.16 ...
+ $ TrackerDistance         : num [1:1397] 8.5 6.97 6.74 6.28 8.16 ...
+ $ VeryActiveDistance      : num [1:1397] 1.88 1.57 2.44 2.14 2.71 ...
+ $ ModeratelyActiveDistance: num [1:1397] 0.55 0.69 0.4 1.26 0.41 ...
+ $ LightActiveDistance     : num [1:1397] 6.06 4.71 3.91 2.83 5.04 ...
+ $ SedentaryActiveDistance : num [1:1397] 0 0 0 0 0 0 0 0 0 0 ...
+ $ VeryActiveMinutes       : num [1:1397] 25 21 30 29 36 38 42 50 28 19 ...
+ $ FairlyActiveMinutes     : num [1:1397] 13 19 11 34 10 20 16 31 12 8 ...
+ $ LightlyActiveMinutes    : num [1:1397] 328 217 181 209 221 164 233 264 205 211 ...
+ $ SedentaryMinutes        : num [1:1397] 728 776 1218 726 773 ...
+ $ Calories                : num [1:1397] 1985 1797 1776 1745 1863 ...
+ $ month                   : num [1:1397] 4 4 4 4 4 4 4 4 4 4 ...
+ $ day                     : num [1:1397] 12 13 14 15 16 17 18 19 20 21 ...
+ $ day_of_week             : chr [1:1397] "Tuesday" "Wednesday" "Thursday" "Friday" ...
+
+
+
+
+# HEARTRATE TABLE
+
+> colSums(is.na(heartrate_seconds))
+   Id  Time Value 
+    0     0     0 
+> sum(duplicated(heartrate_seconds))
+[1] 23424
+> heartrate_duplicates <- colnames(heartrate_seconds)[sapply(heartrate_seconds, function(col) any(duplicated(col)))]
+> heartrate_duplicated_rows <- heartrate_seconds[duplicated(heartrate_seconds), ]
+> View(heartrate_duplicated_rows)
+> heartrate_seconds <- heartrate_seconds %>% distinct()
+> rm(heartrate_duplicated_rows, heartrate_duplicates)
+> sum(duplicated(heartrate_seconds))
+[1] 0
+> heartrate_seconds$month <- format(as.Date(heartrate_seconds$Time), "%m")
+> heartrate_seconds$day <- format(as.Date(heartrate_seconds$Time), "%d")
+> heartrate_seconds$hour <- format(as.POSIXct(heartrate_seconds$Time), "%H")
+> heartrate_seconds$minute <- format(as.POSIXct(heartrate_seconds$Time), "%M")
+> heartrate_seconds$second <- format(as.POSIXct(heartrate_seconds$Time), "%S")
+> heartrate_seconds$day_of_week <- format(as.Date(heartrate_seconds$Time), "%A")
+> str(heartrate_seconds)
+tibble [3,614,915 × 9] (S3: tbl_df/tbl/data.frame)
+ $ Id         : num [1:3614915] 2.02e+09 2.02e+09 2.02e+09 2.02e+09 2.02e+09 ...
+ $ Time       : POSIXct[1:3614915], format: "2016-04-12 07:21:00" "2016-04-12 07:21:05" ...
+ $ Value      : num [1:3614915] 97 102 105 103 101 95 91 93 94 93 ...
+ $ month      : chr [1:3614915] "04" "04" "04" "04" ...
+ $ day        : chr [1:3614915] "12" "12" "12" "12" ...
+ $ hour       : chr [1:3614915] "07" "07" "07" "07" ...
+ $ minute     : chr [1:3614915] "21" "21" "21" "21" ...
+ $ second     : chr [1:3614915] "00" "05" "10" "20" ...
+ $ day_of_week: chr [1:3614915] "Tuesday" "Tuesday" "Tuesday" "Tuesday" ...
+> heartrate_seconds$month <- as.numeric(as.character(heartrate_seconds$month))
+> heartrate_seconds$day <- as.numeric(as.character(heartrate_seconds$day)) 
+> heartrate_seconds$hour <- as.numeric(as.character(heartrate_seconds$hour))
+> heartrate_seconds$minute <- as.numeric(as.character(heartrate_seconds$minute))
+> heartrate_seconds$second <- as.numeric(as.character(heartrate_seconds$second))
+> str(heartrate_seconds)
+tibble [3,614,915 × 9] (S3: tbl_df/tbl/data.frame)
+ $ Id         : num [1:3614915] 2.02e+09 2.02e+09 2.02e+09 2.02e+09 2.02e+09 ...
+ $ Time       : POSIXct[1:3614915], format: "2016-04-12 07:21:00" "2016-04-12 07:21:05" ...
+ $ Value      : num [1:3614915] 97 102 105 103 101 95 91 93 94 93 ...
+ $ month      : num [1:3614915] 4 4 4 4 4 4 4 4 4 4 ...
+ $ day        : num [1:3614915] 12 12 12 12 12 12 12 12 12 12 ...
+ $ hour       : num [1:3614915] 7 7 7 7 7 7 7 7 7 7 ...
+ $ minute     : num [1:3614915] 21 21 21 21 21 22 22 22 22 22 ...
+ $ second     : num [1:3614915] 0 5 10 20 25 5 10 15 20 25 ...
+ $ day_of_week: chr [1:3614915] "Tuesday" "Tuesday" "Tuesday" "Tuesday" ...
+
+
+
+# HOURLY SUMMARY
+
+> colSums(is.na(hourly_summary))
+              Id     ActivityHour         Calories   TotalIntensity AverageIntensity 
+               0                0                0                0                0 
+       StepTotal 
+               0 
+> sum(duplicated(hourly_summary))
+[1] 175
+> hourly_summary <- hourly_summary %>% distinct()
+> sum(duplicated(hourly_summary))
+[1] 0
+> View(hourly_summary)
+> hourly_summary$month <- format(as.Date(hourly_summary$ActivityHour), "%m")
+> hourly_summary$day <- format(as.Date(hourly_summary$ActivityHour), "%d")
+> hourly_summary$hour <- format(as.POSIXct(hourly_summary$ActivityHour), "%H")
+> hourly_summary$day_of_week <- format(as.Date(hourly_summary$ActivityHour), "%A")
+> str(hourly_summary)
+'data.frame':	46008 obs. of  10 variables:
+ $ Id              : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ ActivityHour    : POSIXct, format: "2016-03-12 00:00:00" "2016-03-12 01:00:00" ...
+ $ Calories        : num  48 48 48 48 48 48 48 48 48 49 ...
+ $ TotalIntensity  : num  0 0 0 0 0 0 0 0 0 1 ...
+ $ AverageIntensity: num  0 0 0 0 0 ...
+ $ StepTotal       : num  0 0 0 0 0 0 0 0 0 8 ...
+ $ month           : chr  "03" "03" "03" "03" ...
+ $ day             : chr  "12" "12" "12" "12" ...
+ $ hour            : chr  "00" "01" "02" "03" ...
+ $ day_of_week     : chr  "Saturday" "Saturday" "Saturday" "Saturday" ...
+> hourly_summary$month <- as.numeric(as.character(hourly_summary$month))
+> hourly_summary$day <- as.numeric(as.character(hourly_summary$day))
+> hourly_summary$hour <- as.numeric(as.character(hourly_summary$hour))
+> str(hourly_summary)
+'data.frame':	46008 obs. of  10 variables:
+ $ Id              : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ ActivityHour    : POSIXct, format: "2016-03-12 00:00:00" "2016-03-12 01:00:00" ...
+ $ Calories        : num  48 48 48 48 48 48 48 48 48 49 ...
+ $ TotalIntensity  : num  0 0 0 0 0 0 0 0 0 1 ...
+ $ AverageIntensity: num  0 0 0 0 0 ...
+ $ StepTotal       : num  0 0 0 0 0 0 0 0 0 8 ...
+ $ month           : num  3 3 3 3 3 3 3 3 3 3 ...
+ $ day             : num  12 12 12 12 12 12 12 12 12 12 ...
+ $ hour            : num  0 1 2 3 4 5 6 7 8 9 ...
+ $ day_of_week     : chr  "Saturday" "Saturday" "Saturday" "Saturday" ...
+ 
+
+
+# MINUTELY SUMMARY
+
+> colSums(is.na(minutely_summary))
+            Id ActivityMinute       Calories      Intensity           METs          Steps 
+             0              0              0              0              0              0 
+> sum(duplicated(minutely_summary))
+[1] 10500
+> minutely_summary <- minutely_summary %>% distinct()
+> minutely_summary$month <- format(as.Date(minutely_summary$ActivityMinute), "%m")
+> minutely_summary$day <- format(as.Date(minutely_summary$ActivityMinute), "%d")
+> minutely_summary$hour <- format(as.POSIXct(minutely_summary$ActivityMinute), "%H")
+> minutely_summary$minute <- format(as.POSIXct(minutely_summary$ActivityMinute), "%M")
+> minutely_summary$day_of_week <- format(as.Date(minutely_summary$ActivityMinute), "%A")
+> str(minutely_summary)
+'data.frame':	2760120 obs. of  11 variables:
+ $ Id            : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ ActivityMinute: POSIXct, format: "2016-03-12 00:00:00" "2016-03-12 00:01:00" ...
+ $ Calories      : num  0.797 0.797 0.797 0.797 0.797 ...
+ $ Intensity     : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ METs          : num  10 10 10 10 10 10 10 10 10 10 ...
+ $ Steps         : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ month         : chr  "03" "03" "03" "03" ...
+ $ day           : chr  "12" "12" "12" "12" ...
+ $ hour          : chr  "00" "00" "00" "00" ...
+ $ minute        : chr  "00" "01" "02" "03" ...
+ $ day_of_week   : chr  "Saturday" "Saturday" "Saturday" "Saturday" ...
+> minutely_summary$month <- as.numeric(as.character(minutely_summary$month))
+> minutely_summary$day <- as.numeric(as.character(minutely_summary$day))
+> minutely_summary$hour <- as.numeric(as.character(minutely_summary$hour))
+> minutely_summary$minute <- as.numeric(as.character(minutely_summary$minute))
+> str(minutely_summary)
+'data.frame':	2760120 obs. of  11 variables:
+ $ Id            : num  1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ ActivityMinute: POSIXct, format: "2016-03-12 00:00:00" "2016-03-12 00:01:00" ...
+ $ Calories      : num  0.797 0.797 0.797 0.797 0.797 ...
+ $ Intensity     : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ METs          : num  10 10 10 10 10 10 10 10 10 10 ...
+ $ Steps         : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ month         : num  3 3 3 3 3 3 3 3 3 3 ...
+ $ day           : num  12 12 12 12 12 12 12 12 12 12 ...
+ $ hour          : num  0 0 0 0 0 0 0 0 0 0 ...
+ $ minute        : num  0 1 2 3 4 5 6 7 8 9 ...
+ $ day_of_week   : chr  "Saturday" "Saturday" "Saturday" "Saturday" ...
+
+
+
+
+
+# MINUTES ASLEEP
+
+> colSums(is.na(minutes_asleep))
+   Id  date value logId 
+    0     0     0     0 
+> sum(duplicated(minutes_asleep))
+[1] 4300
+> minutes_asleep <- minutes_asleep %>% distinct()
+> minutes_asleep$month <- format(as.Date(minutes_asleep$date), "%m")
+> minutes_asleep$day <- format(as.Date(minutes_asleep$date), "%d")
+> minutes_asleep$hour <- format(as.POSIXct(minutes_asleep$date), "%H")
+> minutes_asleep$minute <- format(as.POSIXct(minutes_asleep$date), "%M")
+> minutes_asleep$day_of_week <- format(as.Date(minutes_asleep$date), "%A")
+> str(minutes_asleep)
+tibble [382,780 × 9] (S3: tbl_df/tbl/data.frame)
+ $ Id         : num [1:382780] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ date       : POSIXct[1:382780], format: "2016-03-13 02:39:30" "2016-03-13 02:40:30" ...
+ $ value      : num [1:382780] 1 1 1 1 1 1 2 2 1 1 ...
+ $ logId      : num [1:382780] 1.11e+10 1.11e+10 1.11e+10 1.11e+10 1.11e+10 ...
+ $ month      : chr [1:382780] "03" "03" "03" "03" ...
+ $ day        : chr [1:382780] "13" "13" "13" "13" ...
+ $ hour       : chr [1:382780] "02" "02" "02" "02" ...
+ $ minute     : chr [1:382780] "39" "40" "41" "42" ...
+ $ day_of_week: chr [1:382780] "Sunday" "Sunday" "Sunday" "Sunday" ...
+> minutes_asleep$month <- as.numeric(as.character(minutes_asleep$month))
+> minutes_asleep$day <- as.numeric(as.character(minutes_asleep$day))
+> minutes_asleep$hour <- as.numeric(as.character(minutes_asleep$hour))
+> minutes_asleep$minute <- as.numeric(as.character(minutes_asleep$minute))
+> str(minutes_asleep)
+tibble [382,780 × 9] (S3: tbl_df/tbl/data.frame)
+ $ Id         : num [1:382780] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ date       : POSIXct[1:382780], format: "2016-03-13 02:39:30" "2016-03-13 02:40:30" ...
+ $ value      : num [1:382780] 1 1 1 1 1 1 2 2 1 1 ...
+ $ logId      : num [1:382780] 1.11e+10 1.11e+10 1.11e+10 1.11e+10 1.11e+10 ...
+ $ month      : num [1:382780] 3 3 3 3 3 3 3 3 3 3 ...
+ $ day        : num [1:382780] 13 13 13 13 13 13 13 13 13 13 ...
+ $ hour       : num [1:382780] 2 2 2 2 2 2 2 2 2 2 ...
+ $ minute     : num [1:382780] 39 40 41 42 43 44 45 46 47 48 ...
+ $ day_of_week: chr [1:382780] "Sunday" "Sunday" "Sunday" "Sunday" ...
+
+
+
+
+
+# SLEEP DAY
+
+> colSums(is.na(sleep_day))
+                Id           SleepDay  TotalSleepRecords TotalMinutesAsleep 
+                 0                  0                  0                  0 
+    TotalTimeInBed 
+                 0 
+> sum(duplicated(sleep_day))
+[1] 0
+> View(sleep_day)
+> sleep_day$month <- format(as.Date(sleep_day$SleepDay), "%m")
+> sleep_day$day <- format(as.Date(sleep_day$SleepDay), "%d")
+> sleep_day$day_of_week <- format(as.Date(sleep_day$SleepDay), "%A")
+> str(sleep_day)
+tibble [901 × 8] (S3: tbl_df/tbl/data.frame)
+ $ Id                : num [1:901] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ SleepDay          : POSIXct[1:901], format: "2016-03-13" "2016-03-14" ...
+ $ TotalSleepRecords : num [1:901] 1 1 1 2 1 1 1 1 1 1 ...
+ $ TotalMinutesAsleep: num [1:901] 411 354 312 333 402 379 447 469 390 281 ...
+ $ TotalTimeInBed    : num [1:901] 426 386 335 366 437 411 468 476 427 297 ...
+ $ month             : chr [1:901] "03" "03" "03" "03" ...
+ $ day               : chr [1:901] "13" "14" "15" "16" ...
+ $ day_of_week       : chr [1:901] "Sunday" "Monday" "Tuesday" "Wednesday" ...
+> sleep_day$month <- as.numeric(as.character(sleep_day$month))
+> sleep_day$day <- as.numeric(as.character(sleep_day$day))
+> str(sleep_day)
+tibble [901 × 8] (S3: tbl_df/tbl/data.frame)
+ $ Id                : num [1:901] 1.5e+09 1.5e+09 1.5e+09 1.5e+09 1.5e+09 ...
+ $ SleepDay          : POSIXct[1:901], format: "2016-03-13" "2016-03-14" ...
+ $ TotalSleepRecords : num [1:901] 1 1 1 2 1 1 1 1 1 1 ...
+ $ TotalMinutesAsleep: num [1:901] 411 354 312 333 402 379 447 469 390 281 ...
+ $ TotalTimeInBed    : num [1:901] 426 386 335 366 437 411 468 476 427 297 ...
+ $ month             : num [1:901] 3 3 3 3 3 3 3 3 3 3 ...
+ $ day               : num [1:901] 13 14 15 16 17 18 19 20 21 23 ...
+ $ day_of_week       : chr [1:901] "Sunday" "Monday" "Tuesday" "Wednesday" ...
+
+
+
+
+
+# WEIGHT LOG
+
+> colSums(is.na(weight_log))
+            Id           Date       WeightKg   WeightPounds            Fat            BMI 
+             0              0              0              0             96              0 
+IsManualReport          LogId 
+             0              0 
+> sum(duplicated(weight_log))
+[1] 2
+> weight_log$Fat <- NULL
+> weight_log <- weight_log %>% distinct()
+> View(weight_log)
+> weight_log$month <- format(as.Date(weight_log$Date), "%m")
+> weight_log$day <- format(as.Date(weight_log$Date), "%d")
+> weight_log$day_of_week <- format(as.Date(weight_log$Date), "%A")
+> str(weight_log)
+tibble [98 × 10] (S3: tbl_df/tbl/data.frame)
+ $ Id            : num [1:98] 1.50e+09 1.50e+09 1.93e+09 2.87e+09 2.87e+09 ...
+ $ Date          : POSIXct[1:98], format: "2016-05-02 23:59:59" "2016-05-03 23:59:59" ...
+ $ WeightKg      : num [1:98] 52.6 52.6 133.5 56.7 57.3 ...
+ $ WeightPounds  : num [1:98] 116 116 294 125 126 ...
+ $ BMI           : num [1:98] 22.6 22.6 47.5 21.5 21.7 ...
+ $ IsManualReport: logi [1:98] TRUE TRUE FALSE TRUE TRUE TRUE ...
+ $ LogId         : num [1:98] 1.46e+12 1.46e+12 1.46e+12 1.46e+12 1.46e+12 ...
+ $ month         : chr [1:98] "05" "05" "04" "04" ...
+ $ day           : chr [1:98] "02" "03" "13" "21" ...
+ $ day_of_week   : chr [1:98] "Monday" "Tuesday" "Wednesday" "Thursday" ...
+> weight_log$month <- as.numeric(as.character(weight_log$month))
+> weight_log$day <- as.numeric(as.character(weight_log$day))
+> str(weight_log)
+tibble [98 × 10] (S3: tbl_df/tbl/data.frame)
+ $ Id            : num [1:98] 1.50e+09 1.50e+09 1.93e+09 2.87e+09 2.87e+09 ...
+ $ Date          : POSIXct[1:98], format: "2016-05-02 23:59:59" "2016-05-03 23:59:59" ...
+ $ WeightKg      : num [1:98] 52.6 52.6 133.5 56.7 57.3 ...
+ $ WeightPounds  : num [1:98] 116 116 294 125 126 ...
+ $ BMI           : num [1:98] 22.6 22.6 47.5 21.5 21.7 ...
+ $ IsManualReport: logi [1:98] TRUE TRUE FALSE TRUE TRUE TRUE ...
+ $ LogId         : num [1:98] 1.46e+12 1.46e+12 1.46e+12 1.46e+12 1.46e+12 ...
+ $ month         : num [1:98] 5 5 4 4 5 4 5 4 4 5 ...
+ $ day           : num [1:98] 2 3 13 21 12 17 4 18 25 1 ...
+ $ day_of_week   : chr [1:98] "Monday" "Tuesday" "Wednesday" "Thursday" ...
+
+
+
+
+# 4. DATA INSPECTION
+
+> summary(daily_activity)
+       Id             ActivityDate          TotalSteps    TotalDistance   
+ Min.   :1.504e+09   Min.   :2016-03-12   Min.   :    0   Min.   : 0.000  
+ 1st Qu.:2.320e+09   1st Qu.:2016-04-09   1st Qu.: 3146   1st Qu.: 2.170  
+ Median :4.445e+09   Median :2016-04-19   Median : 6999   Median : 4.950  
+ Mean   :4.781e+09   Mean   :2016-04-19   Mean   : 7281   Mean   : 5.219  
+ 3rd Qu.:6.962e+09   3rd Qu.:2016-04-30   3rd Qu.:10544   3rd Qu.: 7.500  
+ Max.   :8.878e+09   Max.   :2016-05-12   Max.   :36019   Max.   :28.030  
+ TrackerDistance  VeryActiveDistance ModeratelyActiveDistance LightActiveDistance
+ Min.   : 0.000   Min.   : 0.000     Min.   :0.0000           Min.   : 0.000     
+ 1st Qu.: 2.160   1st Qu.: 0.000     1st Qu.:0.0000           1st Qu.: 1.610     
+ Median : 4.950   Median : 0.100     Median :0.2000           Median : 3.240     
+ Mean   : 5.192   Mean   : 1.397     Mean   :0.5385           Mean   : 3.193     
+ 3rd Qu.: 7.480   3rd Qu.: 1.830     3rd Qu.:0.7700           3rd Qu.: 4.690     
+ Max.   :28.030   Max.   :21.920     Max.   :6.4800           Max.   :12.510     
+ SedentaryActiveDistance VeryActiveMinutes FairlyActiveMinutes LightlyActiveMinutes
+ Min.   :0.000000        Min.   :  0.00    Min.   :  0.0       Min.   :  0.0       
+ 1st Qu.:0.000000        1st Qu.:  0.00    1st Qu.:  0.0       1st Qu.:111.0       
+ Median :0.000000        Median :  2.00    Median :  6.0       Median :195.0       
+ Mean   :0.001704        Mean   : 19.68    Mean   : 13.4       Mean   :185.4       
+ 3rd Qu.:0.000000        3rd Qu.: 30.00    3rd Qu.: 18.0       3rd Qu.:262.0       
+ Max.   :0.110000        Max.   :210.00    Max.   :660.0       Max.   :720.0       
+ SedentaryMinutes    Calories        month            day        day_of_week       
+ Min.   :   0.0   Min.   :   0   Min.   :3.000   Min.   : 1.00   Length:1397       
+ 1st Qu.: 729.0   1st Qu.:1799   1st Qu.:4.000   1st Qu.: 6.00   Class :character  
+ Median :1057.0   Median :2114   Median :4.000   Median :12.00   Mode  :character  
+ Mean   : 992.5   Mean   :2266   Mean   :4.183   Mean   :13.64                     
+ 3rd Qu.:1244.0   3rd Qu.:2770   3rd Qu.:4.000   3rd Qu.:21.00                     
+ Max.   :1440.0   Max.   :4900   Max.   :5.000   Max.   :31.00                     
+> colSums(is.na(daily_activity))
+                      Id             ActivityDate               TotalSteps 
+                       0                        0                        0 
+           TotalDistance          TrackerDistance       VeryActiveDistance 
+                       0                        0                        0 
+ModeratelyActiveDistance      LightActiveDistance  SedentaryActiveDistance 
+                       0                        0                        0 
+       VeryActiveMinutes      FairlyActiveMinutes     LightlyActiveMinutes 
+                       0                        0                        0 
+        SedentaryMinutes                 Calories                    month 
+                       0                        0                        0 
+                     day              day_of_week 
+                       0                        0 
+> sum(duplicated(daily_activity))
+[1] 0
+> summary(heartrate_seconds)
+       Id                 Time                            Value            month      
+ Min.   :2.022e+09   Min.   :2016-03-29 00:00:05.00   Min.   : 36.00   Min.   :3.000  
+ 1st Qu.:4.020e+09   1st Qu.:2016-04-09 09:15:05.00   1st Qu.: 64.00   1st Qu.:4.000  
+ Median :5.554e+09   Median :2016-04-19 20:25:20.00   Median : 74.00   Median :4.000  
+ Mean   :5.461e+09   Mean   :2016-04-20 07:24:37.66   Mean   : 78.14   Mean   :4.235  
+ 3rd Qu.:6.962e+09   3rd Qu.:2016-04-30 20:31:35.00   3rd Qu.: 89.00   3rd Qu.:4.000  
+ Max.   :8.878e+09   Max.   :2016-05-12 16:20:00.00   Max.   :203.00   Max.   :5.000  
+      day             hour           minute          second      day_of_week       
+ Min.   : 1.00   Min.   : 0.00   Min.   : 0.00   Min.   : 0.00   Length:3614915    
+ 1st Qu.: 5.00   1st Qu.: 8.00   1st Qu.:14.00   1st Qu.:12.00   Class :character  
+ Median :10.00   Median :13.00   Median :29.00   Median :30.00   Mode  :character  
+ Mean   :12.75   Mean   :12.43   Mean   :29.49   Mean   :27.69                     
+ 3rd Qu.:20.00   3rd Qu.:17.00   3rd Qu.:44.00   3rd Qu.:42.00                     
+ Max.   :31.00   Max.   :23.00   Max.   :59.00   Max.   :59.00                     
+> colSums(is.na(heartrate_seconds))
+         Id        Time       Value       month         day        hour      minute 
+          0           0           0           0           0           0           0 
+     second day_of_week 
+          0           0 
+> sum(duplicated(heartrate_seconds))
+[1] 0
+> summary(hourly_summary)
+       Id             ActivityHour                       Calories      TotalIntensity  
+ Min.   :1.504e+09   Min.   :2016-03-12 00:00:00.00   Min.   : 42.00   Min.   :  0.00  
+ 1st Qu.:2.320e+09   1st Qu.:2016-03-26 12:00:00.00   1st Qu.: 62.00   1st Qu.:  0.00  
+ Median :4.559e+09   Median :2016-04-10 10:30:00.00   Median : 80.00   Median :  2.00  
+ Mean   :4.870e+09   Mean   :2016-04-10 17:02:57.23   Mean   : 95.82   Mean   : 11.42  
+ 3rd Qu.:6.962e+09   3rd Qu.:2016-04-25 16:00:00.00   3rd Qu.:106.00   3rd Qu.: 15.00  
+ Max.   :8.878e+09   Max.   :2016-05-12 15:00:00.00   Max.   :948.00   Max.   :180.00  
+ AverageIntensity    StepTotal           month            day             hour      
+ Min.   :0.00000   Min.   :    0.0   Min.   :3.000   Min.   : 1.00   Min.   : 0.00  
+ 1st Qu.:0.00000   1st Qu.:    0.0   1st Qu.:3.000   1st Qu.: 8.00   1st Qu.: 5.00  
+ Median :0.03333   Median :   21.0   Median :4.000   Median :16.00   Median :11.00  
+ Mean   :0.19037   Mean   :  302.9   Mean   :3.818   Mean   :16.03   Mean   :11.45  
+ 3rd Qu.:0.25000   3rd Qu.:  323.0   3rd Qu.:4.000   3rd Qu.:24.00   3rd Qu.:17.00  
+ Max.   :3.00000   Max.   :10565.0   Max.   :5.000   Max.   :31.00   Max.   :23.00  
+ day_of_week       
+ Length:46008      
+ Class :character  
+ Mode  :character                    
+> colSums(is.na(hourly_summary))
+              Id     ActivityHour         Calories   TotalIntensity AverageIntensity 
+               0                0                0                0                0 
+       StepTotal            month              day             hour      day_of_week 
+               0                0                0                0                0 
+> sum(duplicated(hourly_summary))
+[1] 0
+> summary(minutely_summary)
+       Id            ActivityMinute                      Calories         Intensity     
+ Min.   :1.504e+09   Min.   :2016-03-12 00:00:00.00   Min.   : 0.0000   Min.   :0.0000  
+ 1st Qu.:2.320e+09   1st Qu.:2016-03-26 12:29:45.00   1st Qu.: 0.9357   1st Qu.:0.0000  
+ Median :4.559e+09   Median :2016-04-10 10:53:00.00   Median : 1.2176   Median :0.0000  
+ Mean   :4.870e+09   Mean   :2016-04-10 17:26:28.13   Mean   : 1.5970   Mean   :0.1904  
+ 3rd Qu.:6.962e+09   3rd Qu.:2016-04-25 16:15:00.00   3rd Qu.: 1.4310   3rd Qu.:0.0000  
+ Max.   :8.878e+09   Max.   :2016-05-12 15:59:00.00   Max.   :23.0126   Max.   :3.0000  
+      METs            Steps             month            day             hour      
+ Min.   :  0.00   Min.   :  0.000   Min.   :3.000   Min.   : 1.00   Min.   : 0.00  
+ 1st Qu.: 10.00   1st Qu.:  0.000   1st Qu.:3.000   1st Qu.: 8.00   1st Qu.: 5.00  
+ Median : 10.00   Median :  0.000   Median :4.000   Median :16.00   Median :11.00  
+ Mean   : 14.46   Mean   :  5.048   Mean   :3.818   Mean   :16.03   Mean   :11.45  
+ 3rd Qu.: 11.00   3rd Qu.:  0.000   3rd Qu.:4.000   3rd Qu.:24.00   3rd Qu.:17.00  
+ Max.   :189.00   Max.   :220.000   Max.   :5.000   Max.   :31.00   Max.   :23.00  
+     minute      day_of_week       
+ Min.   : 0.00   Length:2760120    
+ 1st Qu.:14.75   Class :character  
+ Median :29.50   Mode  :character  
+ Mean   :29.50                     
+ 3rd Qu.:44.25                     
+ Max.   :59.00                     
+> colSums(is.na(minutely_summary))
+            Id ActivityMinute       Calories      Intensity           METs          Steps 
+             0              0              0              0              0              0 
+         month            day           hour         minute    day_of_week 
+             0              0              0              0              0 
+> sum(duplicated(minutely_summary))
+[1] 0
+> summary(minutes_asleep)
+       Id                 date                            value           logId          
+ Min.   :1.504e+09   Min.   :2016-03-11 21:19:30.00   Min.   :1.000   Min.   :1.110e+10  
+ 1st Qu.:3.977e+09   1st Qu.:2016-03-27 20:15:45.00   1st Qu.:1.000   1st Qu.:1.124e+10  
+ Median :4.703e+09   Median :2016-04-11 02:27:00.00   Median :1.000   Median :1.137e+10  
+ Mean   :4.910e+09   Mean   :2016-04-11 03:11:35.36   Mean   :1.091   Mean   :1.137e+10  
+ 3rd Qu.:6.776e+09   3rd Qu.:2016-04-26 04:45:00.00   3rd Qu.:1.000   3rd Qu.:1.150e+10  
+ Max.   :8.792e+09   Max.   :2016-05-12 09:56:00.00   Max.   :3.000   Max.   :1.162e+10  
+     month            day             hour            minute      day_of_week       
+ Min.   :3.000   Min.   : 1.00   Min.   : 0.000   Min.   : 0.00   Length:382780     
+ 1st Qu.:3.000   1st Qu.: 8.00   1st Qu.: 2.000   1st Qu.:15.00   Class :character  
+ Median :4.000   Median :15.00   Median : 4.000   Median :30.00   Mode  :character  
+ Mean   :3.849   Mean   :15.71   Mean   : 6.487   Mean   :29.52                     
+ 3rd Qu.:4.000   3rd Qu.:24.00   3rd Qu.: 7.000   3rd Qu.:44.00                     
+ Max.   :5.000   Max.   :31.00   Max.   :23.000   Max.   :59.00                     
+> colSums(is.na(minutes_asleep))
+         Id        date       value       logId       month         day        hour 
+          0           0           0           0           0           0           0 
+     minute day_of_week 
+          0           0 
+> sum(duplicated(minutes_asleep))
+[1] 0
+> summary(sleep_day)
+       Id               SleepDay                      TotalSleepRecords
+ Min.   :1.504e+09   Min.   :2016-03-11 00:00:00.00   Min.   :1.000    
+ 1st Qu.:3.977e+09   1st Qu.:2016-03-27 00:00:00.00   1st Qu.:1.000    
+ Median :4.703e+09   Median :2016-04-11 00:00:00.00   Median :2.000    
+ Mean   :4.875e+09   Mean   :2016-04-10 19:17:06.85   Mean   :1.686    
+ 3rd Qu.:6.776e+09   3rd Qu.:2016-04-26 00:00:00.00   3rd Qu.:2.000    
+ Max.   :8.792e+09   Max.   :2016-05-12 00:00:00.00   Max.   :6.000    
+ TotalMinutesAsleep TotalTimeInBed       month            day        day_of_week       
+ Min.   :   0.0     Min.   :   4.0   Min.   :3.000   Min.   : 1.00   Length:901        
+ 1st Qu.: 331.0     1st Qu.: 373.0   1st Qu.:3.000   1st Qu.: 8.00   Class :character  
+ Median : 417.0     Median : 450.0   Median :4.000   Median :15.00   Mode  :character  
+ Mean   : 395.1     Mean   : 429.6   Mean   :3.848   Mean   :15.69                     
+ 3rd Qu.: 490.0     3rd Qu.: 522.0   3rd Qu.:4.000   3rd Qu.:24.00                     
+ Max.   :1108.0     Max.   :1149.0   Max.   :5.000   Max.   :31.00                     
+> colSums(is.na(sleep_day))
+                Id           SleepDay  TotalSleepRecords TotalMinutesAsleep 
+                 0                  0                  0                  0 
+    TotalTimeInBed              month                day        day_of_week 
+                 0                  0                  0                  0 
+> sum(duplicated(sleep_day))
+[1] 0
+> summary(weight_log)
+       Id                 Date                           WeightKg       WeightPounds  
+ Min.   :1.504e+09   Min.   :2016-03-30 23:59:59.00   Min.   : 52.60   Min.   :116.0  
+ 1st Qu.:6.962e+09   1st Qu.:2016-04-09 02:01:32.25   1st Qu.: 61.50   1st Qu.:135.6  
+ Median :6.962e+09   Median :2016-04-20 03:22:26.50   Median : 62.50   Median :137.8  
+ Mean   :6.812e+09   Mean   :2016-04-20 21:30:11.66   Mean   : 72.47   Mean   :159.8  
+ 3rd Qu.:8.878e+09   3rd Qu.:2016-05-01 23:59:59.00   3rd Qu.: 85.25   3rd Qu.:187.9  
+ Max.   :8.878e+09   Max.   :2016-05-12 23:59:59.00   Max.   :133.50   Max.   :294.3  
+      BMI        IsManualReport      LogId               month            day       
+ Min.   :21.45   Mode :logical   Min.   :1.459e+12   Min.   :3.000   Min.   : 1.00  
+ 1st Qu.:24.00   FALSE:35        1st Qu.:1.460e+12   1st Qu.:4.000   1st Qu.: 5.25  
+ Median :24.39   TRUE :63        Median :1.461e+12   Median :4.000   Median :11.00  
+ Mean   :25.37                   Mean   :1.461e+12   Mean   :4.245   Mean   :12.83  
+ 3rd Qu.:25.59                   3rd Qu.:1.462e+12   3rd Qu.:5.000   3rd Qu.:19.75  
+ Max.   :47.54                   Max.   :1.463e+12   Max.   :5.000   Max.   :31.00  
+ day_of_week       
+ Length:98         
+ Class :character  
+ Mode  :character  
+> colSums(is.na(weight_log))
+            Id           Date       WeightKg   WeightPounds            BMI IsManualReport 
+             0              0              0              0              0              0 
+         LogId          month            day    day_of_week 
+             0              0              0              0 
+> sum(duplicated(weight_log))
+[1] 0
+
+
+
+# 4. SAVING AS EXCEL
+
+> install.packages("openxlsx")
+WARNING: Rtools is required to build R packages but is not currently installed. Please download and install the appropriate version of Rtools before proceeding:
+
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.4/zip_2.3.1.zip'
+Content type 'application/zip' length 434636 bytes (424 KB)
+downloaded 424 KB
+
+trying URL 'https://cran.rstudio.com/bin/windows/contrib/4.4/openxlsx_4.2.7.1.zip'
+Content type 'application/zip' length 2456034 bytes (2.3 MB)
+downloaded 2.3 MB
+
+package ‘zip’ successfully unpacked and MD5 sums checked
+package ‘openxlsx’ successfully unpacked and MD5 sums checked
+
+> library(openxlsx)
+Warning message:
+package ‘openxlsx’ was built under R version 4.4.2 
+
+> write.xlsx(daily_activity, "daily_activity.xlsx")
+> write.xlsx(heartrate_seconds, "heartrate_seconds.xlsx")
+> write.xlsx(hourly_summary, "hourly_summary.xlsx")
+> write.xlsx(minutely_summary, "minutely_summary.xlsx")
+> write.xlsx(minutes_asleep, "minutes_asleep.xlsx")
+> write.xlsx(sleep_day, "sleep_day.xlsx")
+> write.xlsx(weight_log, "weight_summary.xlsx")
