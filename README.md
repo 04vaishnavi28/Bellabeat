@@ -33,10 +33,6 @@ The analytical goal is to analyze smart device usage data to uncover consumer be
 The steps of the data analysis process: **Ask**, **Prepare**, **Process**, **Analyze**, **Share**, and **Act**.
 
 ### <ins>Ask</ins>
-
-
-
-### <ins>Ask</ins>
 These questions will guide your analysis:
 1. What are some trends in smart device usage?
 2. How could these trends apply to Bellabeat customers?
