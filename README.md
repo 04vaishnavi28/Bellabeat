@@ -41,8 +41,8 @@ These questions will guide your analysis:
 5. How can your insights drive business decisions?
 
 **Key tasks**
-* Identify the business task
-* Consider key stakeholders
+1. Identify the business task
+2. Consider key stakeholders
 
 **Deliverable**
 * A clear statement of the business task
