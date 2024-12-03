@@ -109,4 +109,5 @@ Prepare the deliverables that was created, including the high-level recommendati
 
 **Deliverables**
 * Your top high-level insights based on your analysis.
-- For marketing strategy, check [Bellabeat.pptx](https://github.com/04vaishnavi28/Bellabeat/blob/main/Bellabeat.pptx)
+
+For marketing strategy, check [Bellabeat.pptx](https://github.com/04vaishnavi28/Bellabeat/blob/main/Bellabeat.pptx)
