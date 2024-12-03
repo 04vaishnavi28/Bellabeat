@@ -108,5 +108,5 @@ Prepare the deliverables that was created, including the high-level recommendati
 3. Practice presenting your case study to a friend or family member.
 
 **Deliverables**
-* Your top high-level insights based on your analysis
-For marketing strategy, check [Bellabeat.pptx](https://github.com/04vaishnavi28/Bellabeat/blob/main/Bellabeat.pptx)
+* Your top high-level insights based on your analysis.
+- For marketing strategy, check [Bellabeat.pptx](https://github.com/04vaishnavi28/Bellabeat/blob/main/Bellabeat.pptx)
